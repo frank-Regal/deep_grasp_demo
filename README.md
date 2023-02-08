@@ -112,11 +112,14 @@ In `moveit_task_constructor_gpd/config/gpd_congfig.yaml` navigate to line 33 and
   ./dexnet_install.sh {cpu|gpu}
   ```
 
-3) Download the pretrained models
-  ```
-  ./dexnet_deps/gqcnn/scripts/downloads/models/download_models.sh
-  ```
+3) Download the pretrained models. *NOTE: The shell file here actually points to missing box files. Download the ```download_models_modified.sh``` shell script from this repo and place into the same directory as the original ```download_models.sh``` shell script used to grab the dexnet models.
 
+Place ```download_models_modified.sh``` in the following directory within ```dexnet_deps/gqcnn/scripts/downloads/models/```.
+
+Run the script.
+  ```
+  ./dexnet_deps/gqcnn/scripts/downloads/models/download_models_modified.sh
+  ```
 4) Configuration File Paths
 
 In `moveit_task_constructor_gpd/config/dexnet_config.yaml` specify the absolute file paths to the `model_dir` and `model_params` parameters for the Dex-Net 4.0 parallel jaw configuration. The `model_name` is already set to use the Dex-Net 4.0 parallel jaw configuration. The `model_dir` parameter specifies the path to the learned model weights located in `gqcnn/cfg/examples/replication/dex-net_4.0_pj.yaml` and the `model_params` parameter specifies the model configuration located in `gqcnn/models`. If you use the `dexnet_install.sh` script the `gqcnn` directory will be located inside the `dexnet_deps` directory.
@@ -128,9 +131,11 @@ For now it is recommended to create a new workspace to prevent conflicts between
 ```
 mkdir -p ~/ws_grasp/src
 cd ~/ws_grasp/src
-wstool init
-wstool merge https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/.rosinstall
-wstool update
+// old - wstool init
+// old - wstool merge https://raw.githubusercontent.com/PickNikRobotics/deep_grasp_demo/master/.rosinstall
+// old - wstool update
+git clone https://github.com/frank-Regal/deep_grasp_demo.git -b update_generators
+git clone --recursive https://github.com/frank-Regal/moveit_task_constructor.git -b master
 
 rosdep install --from-paths . --ignore-src --rosdistro $ROS_DISTRO
 ```
